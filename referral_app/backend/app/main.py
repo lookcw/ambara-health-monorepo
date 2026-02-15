@@ -40,9 +40,8 @@ from app.schemas import (
 )
 from datetime import datetime
 from app.gmail_service import send_referral_notification_email
-from app.documo_service import verify_webhook_auth, download_fax_pdf
-from app.documo_schemas import DocumoFaxWebhookPayload
-from app.gcs_service import upload_blob
+from app.faxage_service import get_faxage_credentials, list_received_faxes, get_fax_pdf, delete_fax
+from app.gcs_service import upload_blob, blob_exists
 from googleapiclient.errors import HttpError
 
 # Configure logging for Google Cloud
@@ -836,152 +835,118 @@ async def create_referral(
     return referral
 
 
-# Documo Webhook Endpoints
+# Faxage Polling Endpoints
 
 
-@app.post("/api/webhooks/documo/fax", status_code=status.HTTP_200_OK)
-async def documo_fax_webhook(request: Request):
+@app.post("/api/fax/poll-incoming", status_code=status.HTTP_200_OK)
+async def poll_incoming_faxes():
     """
-    Webhook endpoint for Documo fax notifications.
-    Receives notifications when faxes arrive and downloads them as PDFs.
+    Poll Faxage for new inbound faxes.
 
-    Security:
-    - Validates Basic Auth credentials from Authorization header
-    - Verifies x-webhook-event header matches expected event type
-    - Validates payload structure using Pydantic schema
+    Calls Faxage listfax API, downloads any new fax PDFs not already in GCS,
+    uploads them to GCS, and deletes them from the Faxage inbox.
 
     Returns:
-    - 200 OK: Webhook processed successfully
-    - 401 Unauthorized: Invalid credentials
-    - 400 Bad Request: Invalid payload or wrong event type
+        Summary of processed faxes.
     """
-    # Log incoming request details
-    logger.info("=" * 80)
-    logger.info("DOCUMO WEBHOOK: Incoming request")
-    logger.info("=" * 80)
-    logger.info(f"Request URL: {request.url}")
-    logger.info(f"Request method: {request.method}")
-    logger.info(f"Client host: {request.client.host if request.client else 'unknown'}")
+    logger.info("Faxage poll: Starting inbound fax poll")
 
-    # Log headers
-    logger.info("\nRequest Headers:")
-    for header_name, header_value in request.headers.items():
-        # Mask Authorization header value for security
-        if header_name.lower() == "authorization":
-            logger.info(f"  {header_name}: [REDACTED]")
-        else:
-            logger.info(f"  {header_name}: {header_value}")
+    username, company, password = get_faxage_credentials()
+    if not username or not company or not password:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Faxage credentials not configured",
+        )
 
-    # Get and log raw request body
-    raw_body = await request.body()
-    logger.info("\nRaw Request Body:")
-    logger.info(raw_body.decode('utf-8'))
-    logger.info("=" * 80)
-
-    # Parse and validate the payload
+    # List available faxes
     try:
-        body_json = json.loads(raw_body.decode('utf-8'))
-        payload = DocumoFaxWebhookPayload(**body_json)
-        logger.info("\n✓ Payload validation successful")
+        faxes = await list_received_faxes(username, company, password)
     except Exception as e:
-        logger.error(f"Failed to parse/validate payload: {e}", exc_info=True)
+        logger.exception(f"Faxage poll: Failed to list faxes: {e}")
         raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail=f"Invalid payload: {str(e)}"
+            status_code=status.HTTP_502_BAD_GATEWAY,
+            detail=f"Failed to list faxes from Faxage: {e}",
         )
 
-    # Get environment variables
-    webhook_username = os.getenv("DOCUMO_WEBHOOK_USERNAME")
-    webhook_password = os.getenv("DOCUMO_WEBHOOK_PASSWORD")
-    api_key = os.getenv("DOCUMO_API_KEY")
-    base_url = os.getenv("DOCUMO_API_BASE_URL", "https://api.documo.com/v1")
+    logger.info(f"Faxage poll: Found {len(faxes)} fax(es) in inbox")
 
-    if not webhook_username or not webhook_password:
-        logger.error("Documo webhook credentials not configured")
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Webhook credentials not configured"
-        )
+    bucket_name = os.getenv("INBOUND_FAXES_BUCKET", "grove-health-inbound-faxes")
+    now = datetime.utcnow()
+    processed = []
+    skipped = []
+    errors = []
 
-    # Verify Basic Auth
-    authorization = request.headers.get("Authorization")
-    if not verify_webhook_auth(authorization, webhook_username, webhook_password):
-        logger.warning("Documo webhook: Authentication failed")
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
+    for fax in faxes:
+        recvid = fax.get("recvid", "")
+        if not recvid:
+            continue
 
-    # Verify event type
-    event_type = request.headers.get("x-webhook-event")
-    if event_type != "fax.v1.inbound.complete":
-        logger.info(f"Documo webhook: Ignoring event type {event_type}")
-        return {"status": "ignored", "reason": f"Unexpected event type: {event_type}"}
+        blob_path = f"inbound/{now.year}/{now.month:02d}/{now.day:02d}/{recvid}.pdf"
 
-    # Verify direction is inbound
-    if payload.direction != "inbound":
-        logger.info(f"Documo webhook: Ignoring {payload.direction} fax")
-        return {"status": "ignored", "reason": f"Not an inbound fax: {payload.direction}"}
+        # Check if already uploaded
+        if blob_exists(bucket_name, blob_path):
+            logger.info(f"Faxage poll: Fax {recvid} already in GCS, skipping")
+            skipped.append(recvid)
+            continue
 
-    # Extract fax details (handle optional fields safely)
-    message_id = payload.messageId
-    from_number = payload.faxCallerId or "unknown"
-    to_number = payload.faxNumber or "unknown"
-    page_count = payload.pagesCount or 0
+        try:
+            # Download PDF
+            logger.info(f"Faxage poll: Downloading fax {recvid}...")
+            pdf_data = await get_fax_pdf(username, company, password, recvid)
+            logger.info(f"Faxage poll: Downloaded {len(pdf_data)} bytes for fax {recvid}")
+
+            # Upload to GCS
+            metadata = {
+                "recvid": recvid,
+                "caller_id": fax.get("cid", ""),
+                "dnis": fax.get("dnis", ""),
+                "pages": fax.get("pagecount", ""),
+                "received_date": fax.get("revdate", ""),
+                "start_time": fax.get("starttime", ""),
+                "tsid": fax.get("tsid", ""),
+                "direction": "inbound",
+            }
+
+            gcs_url = upload_blob(
+                bucket_name=bucket_name,
+                source_data=pdf_data,
+                destination_blob_name=blob_path,
+                content_type="application/pdf",
+                metadata=metadata,
+            )
+
+            logger.info(f"Faxage poll: Uploaded fax {recvid} to {gcs_url}")
+
+            # Delete from Faxage inbox after successful upload
+            try:
+                await delete_fax(username, company, password, recvid)
+                logger.info(f"Faxage poll: Deleted fax {recvid} from Faxage inbox")
+            except Exception as e:
+                logger.warning(f"Faxage poll: Failed to delete fax {recvid} from Faxage: {e}")
+
+            processed.append({
+                "recvid": recvid,
+                "gcs_url": gcs_url,
+                "caller_id": fax.get("cid", ""),
+                "dnis": fax.get("dnis", ""),
+                "pages": fax.get("pagecount", ""),
+            })
+
+        except Exception as e:
+            logger.exception(f"Faxage poll: Failed to process fax {recvid}: {e}")
+            errors.append({"recvid": recvid, "error": str(e)})
 
     logger.info(
-        f"Documo webhook: Received fax {message_id} from {from_number} to {to_number} ({page_count} pages, status: {payload.status or 'unknown'})"
+        f"Faxage poll: Done. Processed={len(processed)}, Skipped={len(skipped)}, Errors={len(errors)}"
     )
 
-    try:
-        # Download fax PDF
-        logger.info(f"Documo webhook: Downloading PDF for message {message_id}...")
-        pdf_data = await download_fax_pdf(message_id, api_key, base_url)
-        logger.info(f"Documo webhook: Downloaded {len(pdf_data)} bytes")
-
-        # Upload PDF to GCS with metadata
-        bucket_name = os.getenv("INBOUND_FAXES_BUCKET", "grove-health-inbound-faxes")
-        now = datetime.utcnow()
-        blob_path = f"inbound/{now.year}/{now.month:02d}/{now.day:02d}/{message_id}.pdf"
-
-        metadata = {
-            "message_id": message_id,
-            "fax_caller_id": from_number,
-            "fax_number": to_number,
-            "pages_count": str(page_count),
-            "created_at": payload.createdAt or "",
-            "status": payload.status or "",
-            "direction": "inbound",
-        }
-
-        logger.info(f"Documo webhook: Uploading PDF to GCS bucket {bucket_name}...")
-        gcs_url = upload_blob(
-            bucket_name=bucket_name,
-            source_data=pdf_data,
-            destination_blob_name=blob_path,
-            content_type="application/pdf",
-            metadata=metadata,
-        )
-
-        logger.info("=" * 80)
-        logger.info(f"✓ PDF UPLOADED TO: {gcs_url}")
-        logger.info("=" * 80)
-
-        return {
-            "status": "success",
-            "message_id": message_id,
-            "gcs_url": gcs_url,
-            "from_caller_id": from_number,
-            "to_fax_number": to_number,
-            "page_count": page_count,
-            "delivery_status": payload.status or "unknown",
-            "created_at": payload.createdAt or None,
-        }
-
-    except Exception as e:
-        # Log error but return 200 to prevent Documo from retrying
-        logger.error(f"Documo webhook: Failed to download fax {message_id}: {e}")
-        return {
-            "status": "error",
-            "message_id": message_id,
-            "error": str(e),
-        }
+    return {
+        "status": "success",
+        "total_in_inbox": len(faxes),
+        "processed": processed,
+        "skipped": skipped,
+        "errors": errors,
+    }
 
 
 # Network Management Endpoints

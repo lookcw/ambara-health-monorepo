@@ -8,7 +8,7 @@ const Footer = () => {
             <span className="text-lg font-bold">health</span>
           </div>
           <p className="text-sm text-muted-foreground">
-            © 2025 ambara health. All rights reserved.
+            © 2026 ambara health. All rights reserved.
           </p>
         </div>
       </div>

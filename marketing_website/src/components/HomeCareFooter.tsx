@@ -14,7 +14,7 @@ const HomeCareFooter = () => {
           <p className="text-sm text-muted-foreground text-center">
             Making patient care clear and simple for caregivers everywhere.
           </p>
-          <p className="text-sm text-muted-foreground">© 2024 Ambara Health. All rights reserved.</p>
+          <p className="text-sm text-muted-foreground">© 2026 Ambara Health. All rights reserved.</p>
         </div>
       </div>
     </footer>

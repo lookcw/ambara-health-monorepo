@@ -230,7 +230,7 @@ const Index = () => {
                 Team
               </Link>
               <p className="text-sm text-muted-foreground">
-                © 2025 Ambara Health. All rights reserved.
+                © 2026 Ambara Health. All rights reserved.
               </p>
             </div>
           </div>

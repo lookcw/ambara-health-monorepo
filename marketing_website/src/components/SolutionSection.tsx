@@ -9,7 +9,7 @@ const SolutionSection = () => {
             A Better Way Forward
           </h2>
           <p className="text-lg text-muted-foreground">
-            grovehealth flips the script on healthcare costs. We pay your members to adhere to care, 
+            Ambara Health flips the script on healthcare costs. We pay your members to adhere to care, 
             creating a win-win for everyone.
           </p>
         </div>

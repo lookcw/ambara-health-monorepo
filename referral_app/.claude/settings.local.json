@@ -61,7 +61,13 @@
       "Bash(docker-compose stop:*)",
       "Bash(docker-compose start:*)",
       "Bash(docker-compose run:*)",
-      "Bash(atlas migrate hash:*)"
+      "Bash(atlas migrate hash:*)",
+      "WebFetch(domain:www.faxage.com)",
+      "WebFetch(domain:www.scribd.com)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(gcloud secrets create:*)",
+      "Bash(echo:*)"
     ]
   }
 }
