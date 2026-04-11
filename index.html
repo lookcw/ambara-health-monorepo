@@ -506,6 +506,17 @@
     }
     .btn-submit:hover { opacity: 0.85; transform: translateY(-1px); }
 
+    .form-success {
+      display: none;
+      color: var(--paper);
+      font-size: 1.05rem;
+      line-height: 1.7;
+    }
+
+    .form-success.visible {
+      display: block;
+    }
+
     /* ── FOOTER ── */
     footer {
       background: var(--ink);
@@ -576,7 +587,7 @@
       <p class="hero-eyebrow">AI for Member Engagement</p>
       <h1 class="hero-headline">Your members are eligible.<br><em>Most never engage.</em></h1>
       <p class="hero-sub">Ambara is an AI data scientist for B2B2C digital health companies. It analyzes your engagement data, claims, demographics, and outreach history to surface exactly what your team needs to close the gap.</p>
-      <a href="#contact" class="btn-primary">Get Early Access</a>
+      <a href="#contact" class="btn-primary">Request Access</a>
     </div>
     <div class="hero-right">
       <div class="stat-block">
@@ -667,7 +678,7 @@
   <!-- QUOTE -->
   <div class="quote-section">
     <div class="quote-inner">
-      <span class="quote-mark">"</span>
+      <span class="quote-mark">&ldquo;</span>
       <p class="quote-text">I would be surprised if there's any digital health app where, if they were being honest with you, they said, 'We have awesome analytics.' No one builds that from the ground up. It's just too much.</p>
       <p class="quote-attribution">Former Senior Leader, Teladoc</p>
     </div>
@@ -736,19 +747,25 @@
   <!-- CTA -->
   <section class="cta-section" id="contact">
     <div>
-      <p class="section-label">Early Access</p>
-      <h2 class="section-title">We're working with a small group of teams to start.</h2>
+      <p class="section-label">Get Started</p>
+      <h2 class="section-title">Request access here.</h2>
       <p class="section-body">If you're a digital health company struggling to close the gap between contracted lives and engaged members, we want to talk.</p>
     </div>
-    <form class="cta-form" action="https://formspree.io/f/lookwchristopher@gmail.com" method="POST">
-      <div class="form-row">
-        <input class="form-input" type="text" name="first_name" placeholder="First name" required />
-        <input class="form-input" type="text" name="last_name" placeholder="Last name" required />
+    <div>
+      <form class="cta-form" id="contact-form" action="https://formspree.io/f/xnjoegro" method="POST">
+        <div class="form-row">
+          <input class="form-input" type="text" name="first_name" placeholder="First name" required />
+          <input class="form-input" type="text" name="last_name" placeholder="Last name" required />
+        </div>
+        <input class="form-input" type="email" name="email" placeholder="Work email" required />
+        <input class="form-input" type="text" name="company" placeholder="Company" required />
+        <button class="btn-submit" type="submit">Request Access</button>
+      </form>
+      <div class="form-success" id="form-success">
+        <p style="font-family:'DM Serif Display',serif; font-size:1.3rem; margin-bottom:0.5rem;">Thanks for reaching out.</p>
+        <p style="color:rgba(245,242,238,0.6);">We'll be in touch shortly.</p>
       </div>
-      <input class="form-input" type="email" name="email" placeholder="Work email" required />
-      <input class="form-input" type="text" name="company" placeholder="Company" required />
-      <button class="btn-submit" type="submit">Request Access</button>
-    </form>
+    </div>
   </section>
 
   <!-- FOOTER -->
@@ -757,5 +774,33 @@
     <p class="footer-copy">&copy; 2026 Ambara Health. All rights reserved.</p>
   </footer>
 
+  <script>
+    document.getElementById('contact-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      var form = this;
+      var btn = form.querySelector('.btn-submit');
+      btn.textContent = 'Sending...';
+      btn.disabled = true;
+
+      fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { 'Accept': 'application/json' }
+      }).then(function(response) {
+        if (response.ok) {
+          form.style.display = 'none';
+          document.getElementById('form-success').classList.add('visible');
+        } else {
+          btn.textContent = 'Something went wrong — try again';
+          btn.style.background = '#a33';
+          btn.disabled = false;
+        }
+      }).catch(function() {
+        btn.textContent = 'Something went wrong — try again';
+        btn.style.background = '#a33';
+        btn.disabled = false;
+      });
+    });
+  </script>
 </body>
 </html>
