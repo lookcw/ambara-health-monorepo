@@ -740,7 +740,7 @@
       <h2 class="section-title">We're working with a small group of teams to start.</h2>
       <p class="section-body">If you're a digital health company struggling to close the gap between contracted lives and engaged members, we want to talk.</p>
     </div>
-    <form class="cta-form" onsubmit="handleSubmit(event)">
+    <form class="cta-form" action="https://formspree.io/f/lookwchristopher@gmail.com" method="POST">
       <div class="form-row">
         <input class="form-input" type="text" name="first_name" placeholder="First name" required />
         <input class="form-input" type="text" name="last_name" placeholder="Last name" required />
@@ -757,34 +757,5 @@
     <p class="footer-copy">&copy; 2026 Ambara Health. All rights reserved.</p>
   </footer>
 
-  <script>
-    async function handleSubmit(e) {
-      e.preventDefault();
-      const form = e.target;
-      const btn = form.querySelector('.btn-submit');
-      btn.textContent = "Sending...";
-      btn.disabled = true;
-      try {
-        const data = new FormData(form);
-        const res = await fetch("https://formspree.io/f/xywanwwx", {
-          method: "POST",
-          body: data,
-          headers: { "Accept": "application/json" }
-        });
-        if (res.ok) {
-          btn.textContent = "Submitted! We'll be in touch";
-          btn.style.background = '#2a7a4a';
-        } else {
-          btn.textContent = "Something went wrong. Try again.";
-          btn.style.background = '#a33';
-          btn.disabled = false;
-        }
-      } catch (err) {
-        btn.textContent = "Something went wrong. Try again.";
-        btn.style.background = '#a33';
-        btn.disabled = false;
-      }
-    }
-  </script>
 </body>
 </html>
