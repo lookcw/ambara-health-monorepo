@@ -159,9 +159,9 @@
     }
 
     .stat-label {
-      font-size: 0.88rem;
+      font-size: 0.92rem;
       color: var(--muted);
-      line-height: 1.6;
+      line-height: 1.65;
       max-width: 340px;
     }
 
@@ -235,8 +235,8 @@
 
     .problem-card-num {
       font-family: 'DM Serif Display', serif;
-      font-size: 1.8rem;
-      color: rgba(245,242,238,0.2);
+      font-size: 2rem;
+      color: rgba(245,242,238,0.55);
       line-height: 1;
       margin-bottom: 1.2rem;
     }
@@ -249,7 +249,7 @@
     }
 
     .problem-card-body {
-      font-size: 0.88rem;
+      font-size: 0.92rem;
       color: rgba(245,242,238,0.7);
       line-height: 1.75;
     }
@@ -291,9 +291,9 @@
 
     .step-num {
       font-family: 'DM Serif Display', serif;
-      font-size: 1.1rem;
+      font-size: 1.8rem;
       color: var(--accent);
-      min-width: 28px;
+      min-width: 36px;
       padding-top: 2px;
     }
 
@@ -304,7 +304,7 @@
     }
 
     .step-body {
-      font-size: 0.88rem;
+      font-size: 0.92rem;
       color: var(--muted);
       line-height: 1.75;
     }
@@ -394,7 +394,7 @@
     }
 
     .forwho-card-body {
-      font-size: 0.86rem;
+      font-size: 0.92rem;
       color: var(--muted);
       line-height: 1.75;
     }
@@ -438,12 +438,12 @@
 
     .diff-item-title {
       font-family: 'DM Serif Display', serif;
-      font-size: 1.05rem;
-      margin-bottom: 0.35rem;
+      font-size: 1.15rem;
+      margin-bottom: 0.4rem;
     }
 
     .diff-item-body {
-      font-size: 0.86rem;
+      font-size: 0.95rem;
       color: var(--muted);
       line-height: 1.7;
     }
@@ -525,7 +525,7 @@
 
     .footer-copy {
       font-size: 0.75rem;
-      color: rgba(245,242,238,0.3);
+      color: rgba(245,242,238,0.5);
     }
 
     /* ── RESPONSIVE ── */
@@ -605,7 +605,7 @@
       <div class="problem-card">
         <div class="problem-card-num">01</div>
         <h3 class="problem-card-title">Outreach is blunt</h3>
-        <p class="problem-card-body">Most outreach is templated, single-channel, and disconnected from what a member is actually doing. It doesn't reach people at the moment they're most likely to act.</p>
+        <p class="problem-card-body">Most outreach is templated, single channel, and disconnected from what a member is actually doing. It doesn't reach people at the moment they're most likely to act.</p>
       </div>
       <div class="problem-card">
         <div class="problem-card-num">02</div>
@@ -697,7 +697,7 @@
           <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
         </div>
         <h3 class="forwho-card-title">Analytics &amp; Ops Leaders</h3>
-        <p class="forwho-card-body">Stop building one-off analyses before every QBR. Ambara gives you a continuously updated view of what's driving engagement and what's holding it back.</p>
+        <p class="forwho-card-body">Stop building one off analyses before every QBR. Ambara gives you a continuously updated view of what's driving engagement and what's holding it back.</p>
       </div>
     </div>
   </section>
@@ -718,7 +718,7 @@
       <div class="diff-item">
         <p class="diff-item-label">Human in the loop</p>
         <h3 class="diff-item-title">Your team stays in control</h3>
-        <p class="diff-item-body">Healthcare messaging is sensitive and regulated. Ambara doesn't auto-send anything. Every recommendation is reviewed and approved by your people before it goes anywhere.</p>
+        <p class="diff-item-body">Healthcare messaging is sensitive and regulated. Ambara doesn't auto send anything. Every recommendation is reviewed and approved by your people before it goes anywhere.</p>
       </div>
       <div class="diff-item">
         <p class="diff-item-label">Built for your buyer</p>
@@ -727,7 +727,7 @@
       </div>
       <div class="diff-item">
         <p class="diff-item-label">Defensible ROI</p>
-        <h3 class="diff-item-title">QBR-ready from day one</h3>
+        <h3 class="diff-item-title">QBR ready from day one</h3>
         <p class="diff-item-body">Every insight Ambara surfaces is backed by your data, not a projection. When you walk into a client review, you can show exactly what moved and why.</p>
       </div>
     </div>
@@ -742,11 +742,11 @@
     </div>
     <form class="cta-form" onsubmit="handleSubmit(event)">
       <div class="form-row">
-        <input class="form-input" type="text" placeholder="First name" required />
-        <input class="form-input" type="text" placeholder="Last name" required />
+        <input class="form-input" type="text" name="first_name" placeholder="First name" required />
+        <input class="form-input" type="text" name="last_name" placeholder="Last name" required />
       </div>
-      <input class="form-input" type="email" placeholder="Work email" required />
-      <input class="form-input" type="text" placeholder="Company" required />
+      <input class="form-input" type="email" name="email" placeholder="Work email" required />
+      <input class="form-input" type="text" name="company" placeholder="Company" required />
       <button class="btn-submit" type="submit">Request Access</button>
     </form>
   </section>
@@ -758,12 +758,32 @@
   </footer>
 
   <script>
-    function handleSubmit(e) {
+    async function handleSubmit(e) {
       e.preventDefault();
-      const btn = e.target.querySelector('.btn-submit');
-      btn.textContent = "Submitted! We'll be in touch";
-      btn.style.background = '#2a7a4a';
+      const form = e.target;
+      const btn = form.querySelector('.btn-submit');
+      btn.textContent = "Sending...";
       btn.disabled = true;
+      try {
+        const data = new FormData(form);
+        const res = await fetch("https://formspree.io/f/lookwchristopher@gmail.com", {
+          method: "POST",
+          body: data,
+          headers: { "Accept": "application/json" }
+        });
+        if (res.ok) {
+          btn.textContent = "Submitted! We'll be in touch";
+          btn.style.background = '#2a7a4a';
+        } else {
+          btn.textContent = "Something went wrong. Try again.";
+          btn.style.background = '#a33';
+          btn.disabled = false;
+        }
+      } catch (err) {
+        btn.textContent = "Something went wrong. Try again.";
+        btn.style.background = '#a33';
+        btn.disabled = false;
+      }
     }
   </script>
 </body>
