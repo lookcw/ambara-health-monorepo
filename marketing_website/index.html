@@ -1,43 +1,778 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>Ambara Health - Pre-Operative Preparation Made Simple</title>
-    <meta name="description" content="Ambara Health - Turn long pre-op papers into actionable checklists. Reduce cancellations, fill OR slots, and ensure patients arrive prepared for surgery." />
-    <meta name="author" content="Ambara Health" />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ambara Health</title>
+  <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png" />
+  <link rel="apple-touch-icon" href="/favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    <meta property="og:title" content="Ambara Health - Pre-Operative Preparation Made Simple" />
-    <meta property="og:description" content="Turn long pre-op papers into actionable checklists. Reduce cancellations, fill OR slots, and ensure patients arrive prepared for surgery." />
-    <meta property="og:type" content="website" />
-    <meta property="og:image" content="" />
+    :root {
+      --ink: #1a1a1a;
+      --paper: #e9ebe8;
+      --cream: #d6ddd4;
+      --accent: #133817;
+      --accent-soft: #1b4a20;
+      --accent-mid: #63a46c;
+      --accent-light: #c8d6c4;
+      --muted: #666666;
+      --rule: #c2c7c0;
+    }
 
+    html { scroll-behavior: smooth; }
 
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-QBN78YZN22"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
 
-      gtag('config', 'G-QBN78YZN22');
-    </script>
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.4rem 4rem;
+      background: var(--paper);
+      border-bottom: 1px solid var(--rule);
+    }
 
-    <script>
-      // Restore the path from 404 redirect
-      (function() {
-        var redirect = sessionStorage.redirect;
-        delete sessionStorage.redirect;
-        if (redirect && redirect !== location.href) {
-          history.replaceState(null, null, redirect.split(location.origin)[1]);
+    .nav-logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.2rem;
+      letter-spacing: 0.02em;
+      color: var(--ink);
+      text-decoration: none;
+    }
+
+    .nav-logo img {
+      height: 36px;
+      width: 36px;
+      display: block;
+    }
+
+    .footer-logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+    }
+
+    .footer-logo img {
+      height: 26px;
+      width: 26px;
+      display: block;
+      filter: brightness(0) invert(1) opacity(0.85);
+    }
+
+    .nav-cta {
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid var(--accent);
+      padding-bottom: 1px;
+      transition: opacity 0.2s;
+    }
+    .nav-cta:hover { opacity: 0.65; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      padding-top: 80px;
+    }
+
+    .hero-left {
+      padding: 8rem 4rem 6rem 4rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      border-right: 1px solid var(--rule);
+    }
+
+    .hero-eyebrow {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 2rem;
+    }
+
+    .hero-headline {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2.6rem, 4.5vw, 4rem);
+      line-height: 1.1;
+      color: var(--ink);
+      margin-bottom: 2rem;
+    }
+
+    .hero-headline em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .hero-sub {
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 440px;
+      margin-bottom: 3rem;
+      line-height: 1.75;
+    }
+
+    .btn-primary {
+      display: inline-block;
+      background: var(--ink);
+      color: var(--paper);
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 1rem 2.4rem;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .btn-primary:hover {
+      background: var(--accent);
+      transform: translateY(-1px);
+    }
+
+    .hero-right {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 8rem 4rem 6rem 5rem;
+      background: var(--cream);
+    }
+
+    .stat-block {
+      margin-bottom: 4rem;
+      opacity: 0;
+      transform: translateY(16px);
+      animation: fadeUp 0.7s ease forwards;
+    }
+    .stat-block:nth-child(1) { animation-delay: 0.1s; }
+    .stat-block:nth-child(2) { animation-delay: 0.25s; }
+    .stat-block:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .stat-number {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2.8rem, 3.6vw, 3.6rem);
+      line-height: 1;
+      color: var(--accent);
+      margin-bottom: 0.7rem;
+    }
+
+    .stat-label {
+      font-size: 1rem;
+      color: var(--muted);
+      line-height: 1.65;
+      max-width: 360px;
+    }
+
+    .stat-divider {
+      width: 32px;
+      height: 1px;
+      background: var(--rule);
+      margin: 2.5rem 0;
+    }
+
+    /* ── SECTION SHARED ── */
+    section {
+      padding: 7rem 4rem;
+    }
+
+    .section-label {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(1.9rem, 3vw, 2.6rem);
+      line-height: 1.2;
+      max-width: 640px;
+      margin-bottom: 1.5rem;
+    }
+
+    .section-body {
+      font-size: 1rem;
+      color: var(--muted);
+      max-width: 600px;
+      line-height: 1.8;
+    }
+
+    /* ── PROBLEM ── */
+    .problem {
+      background: var(--ink);
+      color: var(--paper);
+    }
+
+    .problem .section-label { color: var(--accent-light); }
+    .problem .section-title { color: var(--paper); max-width: 800px; }
+    .problem .section-body { color: rgba(245,242,238,0.75); max-width: 680px; }
+
+    .problem-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      margin-top: 5rem;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .problem-card {
+      padding: 3rem 3rem 3rem 0;
+      border-right: 1px solid rgba(255,255,255,0.1);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .problem-card:nth-child(even) {
+      padding-left: 3rem;
+      border-right: none;
+    }
+    .problem-card:nth-child(3),
+    .problem-card:nth-child(4) {
+      border-bottom: none;
+    }
+
+    .problem-card-num {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2rem;
+      color: rgba(245,242,238,0.55);
+      line-height: 1;
+      margin-bottom: 1.2rem;
+    }
+
+    .problem-card-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.15rem;
+      color: var(--paper);
+      margin-bottom: 0.75rem;
+    }
+
+    .problem-card-body {
+      font-size: 0.92rem;
+      color: rgba(245,242,238,0.7);
+      line-height: 1.75;
+    }
+
+    /* ── HOW IT WORKS ── */
+    .how {
+      background: var(--paper);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      padding: 0;
+    }
+
+    .how-left {
+      padding: 7rem 5rem 7rem 4rem;
+      border-right: 1px solid var(--rule);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .how-right {
+      padding: 7rem 4rem 7rem 5rem;
+      background: var(--cream);
+    }
+
+    .step {
+      display: flex;
+      gap: 1.5rem;
+      margin-bottom: 2.8rem;
+      padding-bottom: 2.8rem;
+      border-bottom: 1px solid var(--rule);
+    }
+    .step:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .step-num {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.8rem;
+      color: var(--accent);
+      min-width: 36px;
+      padding-top: 2px;
+    }
+
+    .step-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.1rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .step-body {
+      font-size: 0.92rem;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    /* ── FOR WHO ── */
+    .forwho {
+      background: var(--paper);
+    }
+
+    .forwho-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      margin-top: 4rem;
+      border: 1px solid var(--rule);
+    }
+
+    .forwho-card {
+      padding: 2.5rem 2.5rem;
+      border-right: 1px solid var(--rule);
+    }
+    .forwho-card:last-child { border-right: none; }
+
+    .forwho-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--accent-light);
+      border-radius: 50%;
+      margin-bottom: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .forwho-icon svg {
+      width: 16px;
+      height: 16px;
+      stroke: var(--accent);
+      fill: none;
+      stroke-width: 1.5;
+    }
+
+    .forwho-card-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.05rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .forwho-card-body {
+      font-size: 0.92rem;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    /* ── DIFFERENTIATORS ── */
+    .diff {
+      background: var(--cream);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      padding: 0;
+    }
+
+    .diff-left {
+      padding: 7rem 5rem 7rem 4rem;
+      border-right: 1px solid var(--rule);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .diff-right {
+      padding: 7rem 4rem 7rem 5rem;
+    }
+
+    .diff-item {
+      padding: 1.8rem 0;
+      border-bottom: 1px solid var(--rule);
+    }
+    .diff-item:first-child { padding-top: 0; }
+    .diff-item:last-child { border-bottom: none; padding-bottom: 0; }
+
+    .diff-item-label {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.4rem;
+    }
+
+    .diff-item-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.15rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .diff-item-body {
+      font-size: 0.95rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    /* ── CTA ── */
+    .cta-section {
+      background: var(--ink);
+      padding: 8rem 4rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .cta-section .section-label { color: var(--accent-light); }
+    .cta-section .section-title { color: var(--paper); }
+    .cta-section .section-body { color: rgba(245,242,238,0.7); }
+
+    .cta-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .form-input {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: var(--paper);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 300;
+      padding: 0.9rem 1.2rem;
+      outline: none;
+      transition: border-color 0.2s;
+      width: 100%;
+    }
+
+    .form-input::placeholder { color: rgba(245,242,238,0.3); }
+    .form-input:focus { border-color: var(--accent); }
+
+    .btn-submit {
+      background: var(--accent);
+      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 1rem 2rem;
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.15s;
+      align-self: flex-start;
+    }
+    .btn-submit:hover { opacity: 0.85; transform: translateY(-1px); }
+
+    .form-success {
+      display: none;
+      color: var(--paper);
+      font-size: 1.05rem;
+      line-height: 1.7;
+    }
+
+    .form-success.visible {
+      display: block;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--ink);
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding: 2rem 4rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1rem;
+      color: var(--paper);
+      text-decoration: none;
+    }
+
+    .footer-copy {
+      font-size: 0.75rem;
+      color: rgba(245,242,238,0.5);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 1.2rem 2rem; }
+
+      .hero { grid-template-columns: 1fr; min-height: auto; }
+      .hero-left { padding: 6rem 2rem 3rem; border-right: none; border-bottom: 1px solid var(--rule); }
+      .hero-right { padding: 3rem 2rem 5rem; }
+
+      section { padding: 5rem 2rem; }
+
+      .problem-grid { grid-template-columns: 1fr; }
+      .problem-card { border-right: none; padding: 2.5rem 0; }
+      .problem-card:nth-child(even) { padding-left: 0; }
+      .problem-card:nth-child(3) { border-bottom: 1px solid rgba(255,255,255,0.1); }
+
+      .how { grid-template-columns: 1fr; }
+      .how-left { padding: 5rem 2rem 3rem; border-right: none; border-bottom: 1px solid var(--rule); }
+      .how-right { padding: 3rem 2rem 5rem; }
+
+      .forwho-grid { grid-template-columns: 1fr; }
+      .forwho-card { border-right: none; border-bottom: 1px solid var(--rule); }
+      .forwho-card:last-child { border-bottom: none; }
+
+      .diff { grid-template-columns: 1fr; }
+      .diff-left { padding: 5rem 2rem 3rem; border-right: none; border-bottom: 1px solid var(--rule); }
+      .diff-right { padding: 3rem 2rem 5rem; }
+
+      .cta-section { grid-template-columns: 1fr; padding: 5rem 2rem; }
+      .form-row { grid-template-columns: 1fr; }
+
+      footer { flex-direction: column; gap: 1rem; padding: 2rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo"><img src="/logo.png" alt="Ambara Health" />Ambara Health</a>
+    <a href="#contact" class="nav-cta">Request Access</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" style="padding:0;">
+    <div class="hero-left">
+      <p class="hero-eyebrow">AI for Member Engagement</p>
+      <h1 class="hero-headline">Your members are eligible.<br><em>Most never engage.</em></h1>
+      <p class="hero-sub">Ambara is an AI data scientist for B2B2C digital health companies. It analyzes your engagement data, claims, demographics, and outreach history to surface exactly what your team needs to close the gap.</p>
+      <a href="#contact" class="btn-primary">Request Access</a>
+    </div>
+    <div class="hero-right">
+      <div class="stat-block">
+        <div class="stat-number">~3%</div>
+        <div class="stat-label">At one large digital health organization, roughly 3% of contracted members were actively engaged with the program they were covered for.</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-block">
+        <div class="stat-number">1.5x</div>
+        <div class="stat-label">Up to 1.5x engagement lift shown on specific campaigns Ambara has informed.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROBLEM -->
+  <section class="problem">
+    <p class="section-label">The Problem</p>
+    <h2 class="section-title">You contracted millions of lives. A fraction of them know it.</h2>
+    <p class="section-body">Digital health vendors get paid on utilization, and increasingly on shared savings tied to outcomes. But the gap between covered lives and actively engaged members is enormous, and closing it is one of the hardest operational problems in the industry.</p>
+    <div class="problem-grid">
+      <div class="problem-card">
+        <div class="problem-card-num">01</div>
+        <h3 class="problem-card-title">Outreach is blunt</h3>
+        <p class="problem-card-body">Most outreach is templated, single channel, and disconnected from what a member is actually doing. It doesn't reach people at the moment they're most likely to act.</p>
+      </div>
+      <div class="problem-card">
+        <div class="problem-card-num">02</div>
+        <h3 class="problem-card-title">Data is scattered</h3>
+        <p class="problem-card-body">Engagement data, claims, outreach history, demographics. It all lives in different systems. By the time an insight surfaces, the moment to act on it has passed.</p>
+      </div>
+      <div class="problem-card">
+        <div class="problem-card-num">03</div>
+        <h3 class="problem-card-title">No analytics foundation</h3>
+        <p class="problem-card-body">Nobody builds good engagement analytics from the ground up. The only time anyone looks is when a big enterprise QBR is coming and everyone needs answers fast.</p>
+      </div>
+      <div class="problem-card">
+        <div class="problem-card-num">04</div>
+        <h3 class="problem-card-title">Decisions are guesswork</h3>
+        <p class="problem-card-body">Messaging decisions are often made by people in a room deciding what will resonate with a population they don't look like or live like. There's no data backing it up.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <div class="how">
+    <div class="how-left">
+      <p class="section-label">How It Works</p>
+      <h2 class="section-title">An AI data scientist that works alongside your team.</h2>
+      <p class="section-body">Ambara doesn't replace the tools you use. It reads across all of them, finds what's working and what isn't, and surfaces clear, defensible recommendations your team can act on immediately.</p>
+    </div>
+    <div class="how-right">
+      <div class="step">
+        <span class="step-num">01</span>
+        <div>
+          <h3 class="step-title">Connect your data sources</h3>
+          <p class="step-body">Ambara ingests engagement data, outreach history, claims data, demographic information, and research signals, wherever they live today.</p>
+        </div>
+      </div>
+      <div class="step">
+        <span class="step-num">02</span>
+        <div>
+          <h3 class="step-title">Surface actionable insights</h3>
+          <p class="step-body">The AI data scientist identifies which members are most likely to engage, the right channel and timing for each, and the messaging that's most likely to work, all backed by your own data.</p>
+        </div>
+      </div>
+      <div class="step">
+        <span class="step-num">03</span>
+        <div>
+          <h3 class="step-title">Our team helps, using your tools</h3>
+          <p class="step-body">Insights go directly to your growth and marketing team. You stay in Braze, Iterable, HubSpot, or whatever you use. Ambara doesn't ask you to change your stack.</p>
+        </div>
+      </div>
+      <div class="step">
+        <span class="step-num">04</span>
+        <div>
+          <h3 class="step-title">Measure what moves</h3>
+          <p class="step-body">Track enrollment rates, engagement lift, and ROI in a format you can put in front of a client at a QBR and actually defend.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOR WHO -->
+  <section class="forwho">
+    <p class="section-label">Who It's For</p>
+    <h2 class="section-title">Built for the teams responsible for member engagement at digital health companies.</h2>
+    <div class="forwho-grid">
+      <div class="forwho-card">
+        <div class="forwho-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        </div>
+        <h3 class="forwho-card-title">Growth &amp; Member Engagement Teams</h3>
+        <p class="forwho-card-body">You own the gap between covered lives and enrolled members. Ambara gives you the intelligence layer to stop guessing and start closing it.</p>
+      </div>
+      <div class="forwho-card">
+        <div class="forwho-icon">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+        </div>
+        <h3 class="forwho-card-title">Marketing &amp; Outreach Teams</h3>
+        <p class="forwho-card-body">Know which channel, which message, and which moment is most likely to convert for each segment, before you send a single campaign.</p>
+      </div>
+      <div class="forwho-card">
+        <div class="forwho-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        </div>
+        <h3 class="forwho-card-title">Analytics &amp; Ops Leaders</h3>
+        <p class="forwho-card-body">Stop building one off analyses before every QBR. Ambara gives you a continuously updated view of what's driving engagement and what's holding it back.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- DIFFERENTIATORS -->
+  <div class="diff">
+    <div class="diff-left">
+      <p class="section-label">Why Ambara</p>
+      <h2 class="section-title">Intelligence that works with your stack, not against it.</h2>
+      <p class="section-body">Existing platforms want you to rip and replace. Ambara works alongside the tools your team already uses and trusts. It's the layer that makes them smarter.</p>
+    </div>
+    <div class="diff-right">
+      <div class="diff-item">
+        <p class="diff-item-label">No stack replacement</p>
+        <h3 class="diff-item-title">Keep Braze, Iterable, HubSpot, Salesforce</h3>
+        <p class="diff-item-body">Ambara surfaces insights into your existing workflow. Your team doesn't change how they work. They just have better information to work with.</p>
+      </div>
+      <div class="diff-item">
+        <p class="diff-item-label">Human in the loop</p>
+        <h3 class="diff-item-title">Your team stays in control</h3>
+        <p class="diff-item-body">Healthcare messaging is sensitive and regulated. Ambara doesn't auto send anything. Every recommendation is reviewed and approved by your people before it goes anywhere.</p>
+      </div>
+      <div class="diff-item">
+        <p class="diff-item-label">Built for your buyer</p>
+        <h3 class="diff-item-title">For digital health vendors, not health plans</h3>
+        <p class="diff-item-body">Most engagement platforms are built for health plans. Ambara is built specifically for the companies that live and die by member utilization: your Hinges, your Omadas, your Mavens.</p>
+      </div>
+      <div class="diff-item">
+        <p class="diff-item-label">Defensible ROI</p>
+        <h3 class="diff-item-title">QBR ready from day one</h3>
+        <p class="diff-item-body">Every insight Ambara surfaces is backed by your data, not a projection. When you walk into a client review, you can show exactly what moved and why.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <section class="cta-section" id="contact">
+    <div>
+      <p class="section-label">Get Started</p>
+      <h2 class="section-title">Request access here.</h2>
+      <p class="section-body">If you're a digital health company struggling to close the gap between contracted lives and engaged members, we want to talk.</p>
+    </div>
+    <div>
+      <form class="cta-form" id="contact-form" action="https://formspree.io/f/xnjoegro" method="POST">
+        <div class="form-row">
+          <input class="form-input" type="text" name="first_name" placeholder="First name" required />
+          <input class="form-input" type="text" name="last_name" placeholder="Last name" required />
+        </div>
+        <input class="form-input" type="email" name="email" placeholder="Work email" required />
+        <input class="form-input" type="text" name="company" placeholder="Company" required />
+        <button class="btn-submit" type="submit">Request Access</button>
+      </form>
+      <div class="form-success" id="form-success">
+        <p style="font-family:'DM Serif Display',serif; font-size:1.3rem; margin-bottom:0.5rem;">Thanks for reaching out.</p>
+        <p style="color:rgba(245,242,238,0.6);">We'll be in touch shortly.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <a href="#" class="footer-logo"><img src="/logo.png" alt="" />Ambara Health</a>
+    <p class="footer-copy">&copy; 2026 Ambara Health. All rights reserved.</p>
+  </footer>
+
+  <script>
+    document.getElementById('contact-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      var form = this;
+      var btn = form.querySelector('.btn-submit');
+      btn.textContent = 'Sending...';
+      btn.disabled = true;
+
+      fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { 'Accept': 'application/json' }
+      }).then(function(response) {
+        if (response.ok) {
+          form.style.display = 'none';
+          document.getElementById('form-success').classList.add('visible');
+        } else {
+          btn.textContent = 'Something went wrong — try again';
+          btn.style.background = '#a33';
+          btn.disabled = false;
         }
-      })();
-    </script>
-  </head>
-
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+      }).catch(function() {
+        btn.textContent = 'Something went wrong — try again';
+        btn.style.background = '#a33';
+        btn.disabled = false;
+      });
+    });
+  </script>
+</body>
 </html>
