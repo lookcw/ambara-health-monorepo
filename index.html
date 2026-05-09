@@ -335,6 +335,73 @@
       line-height: 1.75;
     }
 
+    /* ── HOW IT WORKS V2 ── */
+    .how-v2 {
+      background: var(--paper);
+      padding: 7rem 4rem;
+    }
+
+    .how-v2-intro {
+      max-width: 780px;
+      margin: 0 auto 4rem;
+      text-align: center;
+    }
+
+    .how-v2-intro .section-title,
+    .how-v2-intro .section-body {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .stage-panel {
+      background: var(--cream);
+      border: 1px solid var(--rule);
+      padding: 3.5rem 4rem;
+      margin: 0 auto 2rem;
+      max-width: 1100px;
+    }
+    .stage-panel:last-child { margin-bottom: 0; }
+
+    .stage-header {
+      padding-bottom: 2.5rem;
+      border-bottom: 1px solid var(--rule);
+      margin-bottom: 2.5rem;
+    }
+
+    .stage-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+    }
+
+    .stage-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.6rem;
+      margin-bottom: 0.75rem;
+      color: var(--ink);
+    }
+
+    .stage-body {
+      font-size: 0.95rem;
+      color: var(--muted);
+      line-height: 1.75;
+      max-width: 640px;
+    }
+
+    .stage-steps .step:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    @media (max-width: 900px) {
+      .how-v2 { padding: 4rem 1.5rem; }
+      .stage-panel { padding: 2.5rem 1.5rem; }
+      .stage-title { font-size: 1.3rem; }
+    }
+
     /* ── FOR WHO ── */
     .forwho {
       background: var(--paper);
@@ -572,7 +639,7 @@
     <div class="hero-left">
       <p class="hero-eyebrow">AI for Member Engagement</p>
       <h1 class="hero-headline">Your members are eligible.<br><em>Most never engage.</em></h1>
-      <p class="hero-sub">Ambara is an AI data scientist for B2B2C digital health companies. It analyzes your engagement data, claims, demographics, and outreach history to surface exactly what your team needs to close the gap.</p>
+      <p class="hero-sub">Ambara is an always-on AI growth team for B2B2C digital health companies. It runs in the background, getting sharper as more of your data comes in, and queues up evidence-based campaigns ready to ship. Your team just approves.</p>
       <a href="#contact" class="btn-primary">Request Access</a>
     </div>
     <div class="hero-right">
@@ -591,13 +658,13 @@
   <!-- PROBLEM -->
   <section class="problem">
     <p class="section-label">The Problem</p>
-    <h2 class="section-title">You contracted millions of lives. A fraction of them know it.</h2>
+    <h2 class="section-title">You contracted thousands of lives. A fraction of them know it.</h2>
     <p class="section-body">Digital health vendors get paid on utilization, and increasingly on shared savings tied to outcomes. But the gap between covered lives and actively engaged members is enormous, and closing it is one of the hardest operational problems in the industry.</p>
     <div class="problem-grid">
       <div class="problem-card">
         <div class="problem-card-num">01</div>
         <h3 class="problem-card-title">Outreach is blunt</h3>
-        <p class="problem-card-body">Most outreach is templated, single channel, and disconnected from what a member is actually doing. It doesn't reach people at the moment they're most likely to act.</p>
+        <p class="problem-card-body">Most outreach is templated and disconnected from what a member is actually doing. It doesn't reach people at the moment they're most likely to act.</p>
       </div>
       <div class="problem-card">
         <div class="problem-card-num">02</div>
@@ -606,55 +673,80 @@
       </div>
       <div class="problem-card">
         <div class="problem-card-num">03</div>
-        <h3 class="problem-card-title">No analytics foundation</h3>
-        <p class="problem-card-body">Nobody builds good engagement analytics from the ground up. The only time anyone looks is when a big enterprise QBR is coming and everyone needs answers fast.</p>
+        <h3 class="problem-card-title">Experiments are often guesswork</h3>
+        <p class="problem-card-body">Most engagement decisions get made in a room, on instinct. The data to inform them usually exists somewhere; it just rarely makes it into the room before the call is made.</p>
       </div>
       <div class="problem-card">
         <div class="problem-card-num">04</div>
-        <h3 class="problem-card-title">Decisions are guesswork</h3>
-        <p class="problem-card-body">Messaging decisions are often made by people in a room deciding what will resonate with a population they don't look like or live like. There's no data backing it up.</p>
+        <h3 class="problem-card-title">Bandwidth is the bottleneck</h3>
+        <p class="problem-card-body">Better copy and better timing live downstream of segmentation, analysis, and implementation. That's work data science or marketing ops have to do. Those teams are the bottleneck, and the experiments that would actually move the number sit in their queue.</p>
       </div>
     </div>
   </section>
 
   <!-- HOW IT WORKS -->
-  <div class="how">
-    <div class="how-left">
+  <section class="how-v2">
+    <div class="how-v2-intro">
       <p class="section-label">How It Works</p>
-      <h2 class="section-title">An AI data scientist that works alongside your team.</h2>
-      <p class="section-body">Ambara doesn't replace the tools you use. It reads across all of them, finds what's working and what isn't, and surfaces clear, defensible recommendations your team can act on immediately.</p>
+      <h2 class="section-title">An AI growth team that works alongside yours.</h2>
+      <p class="section-body">Ambara starts as an intelligence layer on top of the tools you already use, then grows into the team that builds and ships campaigns for you, so the experiments that actually move your numbers stop sitting in a queue.</p>
     </div>
-    <div class="how-right">
-      <div class="step">
-        <span class="step-num">01</span>
-        <div>
-          <h3 class="step-title">Connect your data sources</h3>
-          <p class="step-body">Ambara ingests engagement data, outreach history, claims data, demographic information, and research signals, wherever they live today.</p>
-        </div>
+
+    <div class="stage-panel">
+      <div class="stage-header">
+        <p class="stage-label">Stage 01 / Pilot</p>
+        <h3 class="stage-title">Your existing stack, smarter inputs.</h3>
+        <p class="stage-body">We don't ask you to change anything about how your team works today. Ambara reads across your data and hands your growth team better recommendations to act on, in the tools they already use.</p>
       </div>
-      <div class="step">
-        <span class="step-num">02</span>
-        <div>
-          <h3 class="step-title">Surface actionable insights</h3>
-          <p class="step-body">The AI data scientist identifies which members are most likely to engage, the right channel and timing for each, and the messaging that's most likely to work, all backed by your own data.</p>
+      <div class="stage-steps">
+        <div class="step">
+          <span class="step-num">01</span>
+          <div>
+            <h4 class="step-title">Send us your messiest data</h4>
+            <p class="step-body">Give us whatever you have, in whatever shape it's in. CSVs, database dumps, warehouse exports, raw event logs, wherever your engagement, claims, and outreach data lives. We handle the cleanup, joining, and modeling so your team doesn't have to.</p>
+          </div>
         </div>
-      </div>
-      <div class="step">
-        <span class="step-num">03</span>
-        <div>
-          <h3 class="step-title">Our team helps, using your tools</h3>
-          <p class="step-body">Insights go directly to your growth and marketing team. You stay in Braze, Iterable, HubSpot, or whatever you use. Ambara doesn't ask you to change your stack.</p>
+        <div class="step">
+          <span class="step-num">02</span>
+          <div>
+            <h4 class="step-title">Surface actionable insights</h4>
+            <p class="step-body">The AI growth team identifies which members are most likely to engage, the right channel and timing for each, and the messaging most likely to work, all backed by your own data.</p>
+          </div>
         </div>
-      </div>
-      <div class="step">
-        <span class="step-num">04</span>
-        <div>
-          <h3 class="step-title">Measure what moves</h3>
-          <p class="step-body">Track enrollment rates, engagement lift, and ROI in a format you can put in front of a client at a QBR and actually defend.</p>
+        <div class="step">
+          <span class="step-num">03</span>
+          <div>
+            <h4 class="step-title">Your team ships, using your tools</h4>
+            <p class="step-body">Recommendations go directly to your growth and marketing team. You stay in Braze, Iterable, HubSpot, or whatever you use. Ambara doesn't ask you to change your stack to prove the lift.</p>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+
+    <div class="stage-panel">
+      <div class="stage-header">
+        <p class="stage-label">Stage 02 / Deeper engagement</p>
+        <h3 class="stage-title">Ambara ships the campaigns.</h3>
+        <p class="stage-body">Once the lift is proven, Ambara takes over implementation. Segmentation, copy, and campaign build all happen automatically, so the experiments that would actually move your numbers stop waiting on your data science or marketing ops queue.</p>
+      </div>
+      <div class="stage-steps">
+        <div class="step">
+          <span class="step-num">04</span>
+          <div>
+            <h4 class="step-title">AI builds and implements campaigns</h4>
+            <p class="step-body">Ambara generates the segments, drafts the copy, and queues the campaigns end-to-end. No more waiting on data science to pull a list or marketing ops to wire up the send.</p>
+          </div>
+        </div>
+        <div class="step">
+          <span class="step-num">05</span>
+          <div>
+            <h4 class="step-title">You approve; we measure what moved</h4>
+            <p class="step-body">Every campaign is reviewed by your team before it ships. After it ships, Ambara measures enrollment, engagement lift, and ROI automatically, and feeds the result into the next experiment.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <!-- FOR WHO -->
   <section class="forwho">
@@ -679,8 +771,8 @@
         <div class="forwho-icon">
           <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
         </div>
-        <h3 class="forwho-card-title">Analytics &amp; Ops Leaders</h3>
-        <p class="forwho-card-body">Stop building one off analyses before every QBR. Ambara gives you a continuously updated view of what's driving engagement and what's holding it back.</p>
+        <h3 class="forwho-card-title">Revenue Leaders</h3>
+        <p class="forwho-card-body">Know which engagement levers are actually moving member utilization and revenue. Ambara gives you a continuously updated view of what's working and what's holding it back, without waiting on a data science team to build it.</p>
       </div>
     </div>
   </section>
@@ -688,30 +780,15 @@
   <!-- DIFFERENTIATORS -->
   <div class="diff">
     <div class="diff-left">
-      <p class="section-label">Why Ambara</p>
-      <h2 class="section-title">Intelligence that works with your stack, not against it.</h2>
-      <p class="section-body">Existing platforms want you to rip and replace. Ambara works alongside the tools your team already uses and trusts. It's the layer that makes them smarter.</p>
+      <p class="section-label">Pricing</p>
+      <h2 class="section-title">At-risk pricing.</h2>
+      <p class="section-body">We don't get paid unless we hit an agreed-upon uplift guarantee. If we don't move the number, you don't pay.</p>
     </div>
     <div class="diff-right">
       <div class="diff-item">
-        <p class="diff-item-label">No stack replacement</p>
-        <h3 class="diff-item-title">Keep Braze, Iterable, HubSpot, Salesforce</h3>
-        <p class="diff-item-body">Ambara surfaces insights into your existing workflow. Your team doesn't change how they work. They just have better information to work with.</p>
-      </div>
-      <div class="diff-item">
-        <p class="diff-item-label">Human in the loop</p>
-        <h3 class="diff-item-title">Your team stays in control</h3>
-        <p class="diff-item-body">Healthcare messaging is sensitive and regulated. Ambara doesn't auto send anything. Every recommendation is reviewed and approved by your people before it goes anywhere.</p>
-      </div>
-      <div class="diff-item">
-        <p class="diff-item-label">Built for your buyer</p>
-        <h3 class="diff-item-title">For digital health vendors, not health plans</h3>
-        <p class="diff-item-body">Most engagement platforms are built for health plans. Ambara is built specifically for the companies that live and die by member utilization: your Hinges, your Omadas, your Mavens.</p>
-      </div>
-      <div class="diff-item">
-        <p class="diff-item-label">Defensible ROI</p>
-        <h3 class="diff-item-title">QBR ready from day one</h3>
-        <p class="diff-item-body">Every insight Ambara surfaces is backed by your data, not a projection. When you walk into a client review, you can show exactly what moved and why.</p>
+        <p class="diff-item-label">Guaranteed ROI</p>
+        <h3 class="diff-item-title">You only pay if we move the number</h3>
+        <p class="diff-item-body">You don't owe us anything until we've shown measurable uplift in your data. And our pricing is set below the lift we deliver, so by the time the invoice clears, the engagement has already paid for itself.</p>
       </div>
     </div>
   </div>
@@ -763,12 +840,12 @@
           form.style.display = 'none';
           document.getElementById('form-success').classList.add('visible');
         } else {
-          btn.textContent = 'Something went wrong — try again';
+          btn.textContent = 'Something went wrong, try again';
           btn.style.background = '#a33';
           btn.disabled = false;
         }
       }).catch(function() {
-        btn.textContent = 'Something went wrong — try again';
+        btn.textContent = 'Something went wrong, try again';
         btn.style.background = '#a33';
         btn.disabled = false;
       });
