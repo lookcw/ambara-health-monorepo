@@ -237,16 +237,6 @@
     .problem .section-title { color: var(--paper); max-width: 800px; }
     .problem .section-body { color: rgba(245,242,238,0.75); max-width: 680px; }
 
-    .problem-lead {
-      font-family: 'DM Serif Display', serif;
-      font-size: clamp(1.3rem, 2vw, 1.7rem);
-      color: var(--paper);
-      line-height: 1.35;
-      max-width: 760px;
-      margin-top: 1.5rem;
-      margin-bottom: 1.5rem;
-    }
-
     .problem-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -399,10 +389,33 @@
       padding-bottom: 0;
     }
 
+    .stage-quote {
+      max-width: 880px;
+      margin: 0 auto 2rem;
+      padding: 0 2rem;
+      text-align: center;
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-size: clamp(1.35rem, 2.2vw, 1.85rem);
+      line-height: 1.35;
+      color: var(--accent);
+    }
+
+    .stage-quote::before,
+    .stage-quote::after {
+      content: '';
+      display: block;
+      width: 32px;
+      height: 1px;
+      background: var(--accent);
+      margin: 1.8rem auto;
+    }
+
     @media (max-width: 900px) {
       .how-v2 { padding: 4rem 1.5rem; }
       .stage-panel { padding: 2.5rem 1.5rem; }
       .stage-title { font-size: 1.3rem; }
+      .stage-quote { padding: 0 1rem; }
     }
 
     /* ── DIFFERENTIATORS ── */
@@ -591,7 +604,7 @@
     <div class="hero-left">
       <p class="hero-eyebrow">AI for Member Engagement</p>
       <h1 class="hero-headline">Turn covered lives into <em>engaged members</em>.</h1>
-      <p class="hero-sub">An AI growth team that moves the number &mdash; or you don't pay.</p>
+      <p class="hero-sub">An AI growth team that moves the number. Or you don't pay.</p>
       <a href="#contact" class="btn-primary">Request Access</a>
     </div>
     <div class="hero-right">
@@ -605,9 +618,8 @@
   <!-- PROBLEM -->
   <section class="problem">
     <p class="section-label">The Problem</p>
-    <h2 class="section-title">If you could add 10% more engagement anywhere in your book, where would you add it first?</h2>
-    <p class="problem-lead">You own the gap between covered lives and enrolled members.</p>
-    <p class="section-body">Digital health vendors get paid on utilization, and increasingly on shared savings tied to outcomes. Closing the gap between contracted lives and members who actually engage is one of the hardest operational problems in the industry &mdash; and it's the one you're measured on.</p>
+    <h2 class="section-title">You own the gap between covered lives and enrolled members.</h2>
+    <p class="section-body">You need to grow revenue and prove ROI to your client. But the people you contracted aren't signing up. Or they sign up and never really engage. Closing the gap is one of the hardest operational problems in digital health, and it's the one you're measured on.</p>
     <div class="problem-grid">
       <div class="problem-card">
         <div class="problem-card-num">01</div>
@@ -617,12 +629,12 @@
       <div class="problem-card">
         <div class="problem-card-num">02</div>
         <h3 class="problem-card-title">Data is scattered</h3>
-        <p class="problem-card-body">Engagement, claims, outreach history, demographics &mdash; all in different systems. By the time an insight surfaces, the moment to act has passed.</p>
+        <p class="problem-card-body">Engagement, claims, outreach history, demographics. They all live in different systems. By the time an insight surfaces, the moment to act has passed.</p>
       </div>
       <div class="problem-card">
         <div class="problem-card-num">03</div>
         <h3 class="problem-card-title">Bandwidth is the bottleneck</h3>
-        <p class="problem-card-body">Better copy and timing live downstream of segmentation, analysis, and build &mdash; work that sits with data science and marketing ops. The experiments that would actually move the number sit in their queue.</p>
+        <p class="problem-card-body">Better copy and timing live downstream of segmentation, analysis, and build. That's data science and marketing ops work. The experiments that would actually move the number sit in their queue.</p>
       </div>
     </div>
   </section>
@@ -631,7 +643,7 @@
   <section class="how-v2">
     <div class="how-v2-intro">
       <p class="section-label">How It Works</p>
-      <h2 class="section-title">An AI growth team that builds and ships the campaigns for you &mdash; so the experiments that actually move your numbers stop sitting in a queue.</h2>
+      <h2 class="section-title">An AI growth team that builds and ships the campaigns for you, so the experiments that actually move your numbers stop sitting in a queue.</h2>
       <p class="section-body">Ambara starts as an intelligence layer over the tools you already use, then grows into the team running the work.</p>
     </div>
 
@@ -646,31 +658,33 @@
           <span class="step-num">01</span>
           <div>
             <h4 class="step-title">Send us your messiest data</h4>
-            <p class="step-body">Whatever you have, in whatever shape. CSVs, database dumps, warehouse exports, raw event logs &mdash; wherever engagement, claims, and outreach data lives. We handle the cleanup, joining, and modeling.</p>
+            <p class="step-body">Whatever you have, in whatever shape. CSVs, database dumps, warehouse exports, raw event logs. Wherever engagement, claims, and outreach data lives. We handle the cleanup, joining, and modeling.</p>
           </div>
         </div>
         <div class="step">
           <span class="step-num">02</span>
           <div>
             <h4 class="step-title">Surface actionable insights</h4>
-            <p class="step-body">We identify which members are most likely to engage, the right channel and timing for each, and the messaging most likely to work &mdash; all from your own data.</p>
+            <p class="step-body">We identify which members are most likely to engage, the right channel and timing for each, and the messaging most likely to work, all from your own data.</p>
           </div>
         </div>
         <div class="step">
           <span class="step-num">03</span>
           <div>
             <h4 class="step-title">Your team ships, using your tools</h4>
-            <p class="step-body">Recommendations go directly to your team. You stay in Braze, Iterable, HubSpot, or whatever you use &mdash; we don't ask you to change your stack to prove the lift.</p>
+            <p class="step-body">Recommendations go directly to your team. You stay in Braze, Iterable, HubSpot, or whatever you already use. We don't ask you to change your stack to prove the lift.</p>
           </div>
         </div>
       </div>
     </div>
 
+    <p class="stage-quote">If you could add 10% more engagement anywhere in your book, where would you add it first?</p>
+
     <div class="stage-panel">
       <div class="stage-header">
         <p class="stage-label">Stage 02 / Deeper engagement</p>
         <h3 class="stage-title">Ambara ships the campaigns.</h3>
-        <p class="stage-body">Once the lift is proven, Ambara takes over implementation. Segmentation, copy, and campaign build happen automatically &mdash; no more waiting on data science or marketing ops queues.</p>
+        <p class="stage-body">Once the lift is proven, Ambara takes over implementation. Segmentation, copy, and campaign build happen automatically. No more waiting on data science or marketing ops queues.</p>
       </div>
       <div class="stage-steps">
         <div class="step">
@@ -696,18 +710,18 @@
     <div class="diff-left">
       <p class="section-label">Pricing</p>
       <h2 class="section-title">We own the lift.</h2>
-      <p class="section-body">Self-taught AI hands your team words. We hand you a number. No retainers, no setup fees &mdash; we get paid against measured uplift on your own data. If we don't move the number, you don't pay.</p>
+      <p class="section-body">Self-taught AI hands your team words. We hand you a number. No retainers, no setup fees. We get paid against measured uplift on your own data. If we don't move the number, you don't pay.</p>
     </div>
     <div class="diff-right">
       <div class="diff-item">
         <p class="diff-item-label">How it works</p>
         <h3 class="diff-item-title">Pay against measured lift, not promises.</h3>
-        <p class="diff-item-body">We agree on a target metric upfront &mdash; typically enrollment or active engagement in your covered population &mdash; and a baseline measured from your own data. Ambara only invoices for the lift above that baseline, priced below the value of the engagement we deliver. By the time the invoice clears, the campaigns have paid for themselves.</p>
+        <p class="diff-item-body">We agree on a target metric upfront (typically enrollment or active engagement in your covered population), and a baseline measured from your own data. Ambara only invoices for the lift above that baseline, priced below the value of the engagement we deliver. By the time the invoice clears, the campaigns have paid for themselves.</p>
       </div>
       <div class="diff-item">
         <p class="diff-item-label">What we own</p>
         <h3 class="diff-item-title">You don't own the prompts.</h3>
-        <p class="diff-item-body">An LLM by itself gives your team a starting point. We own the segments, the timing, the copy, the channel, and the lift number &mdash; end-to-end. You don't need to staff prompt engineers or model tuners to get value from this.</p>
+        <p class="diff-item-body">An LLM by itself gives your team a starting point. We own the segments, the timing, the copy, the channel, and the lift number, end-to-end. You don't need to staff prompt engineers or model tuners to get value from this.</p>
       </div>
     </div>
   </div>
